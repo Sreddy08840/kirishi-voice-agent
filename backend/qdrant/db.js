@@ -26,8 +26,37 @@ async function initDB() {
         vectors: { size: 1536, distance: "Cosine" } 
       });
       console.log(`Collection ${COLLECTION_NAME} created successfully.`);
+      
+      // Explicitly Create payload indexes mandated by Cloud filters to discriminate memory vs core knowledge
+      await qdrantClient.createPayloadIndex(COLLECTION_NAME, {
+        field_name: "type",
+        field_schema: "keyword",
+        wait: true
+      });
+      await qdrantClient.createPayloadIndex(COLLECTION_NAME, {
+        field_name: "sessionId",
+        field_schema: "keyword",
+        wait: true
+      });
+      console.log(`Indexes created dynamically on ${COLLECTION_NAME}.`);
     } else {
       console.log(`Collection ${COLLECTION_NAME} already exists.`);
+      // Enforce the payload indexes anyway for backwards compatibility against older collections
+      try {
+        await qdrantClient.createPayloadIndex(COLLECTION_NAME, {
+          field_name: "type",
+          field_schema: "keyword",
+          wait: true
+        });
+        await qdrantClient.createPayloadIndex(COLLECTION_NAME, {
+          field_name: "sessionId",
+          field_schema: "keyword",
+          wait: true
+        });
+        console.log(`Indexes enforced on pre-existing deployment.`);
+      } catch (indexError) {
+        // Silently pass if they were already created previously on the strict configuration
+      }
     }
   } catch (error) {
     console.error("Error initializing Qdrant:", error);
@@ -69,12 +98,47 @@ async function searchData(query, limit = 3) {
     const searchResult = await qdrantClient.search(COLLECTION_NAME, {
       vector: queryEmbedding,
       limit: limit,
-      with_payload: true
+      with_payload: true,
+      filter: {
+        must_not: [{ key: "type", match: { value: "memory" } }]
+      }
     });
     
     return searchResult;
   } catch (error) {
     console.error("Error searching in Qdrant:", error);
+    return [];
+  }
+}
+
+async function insertMemory(sessionId, query) {
+  // Pushing chronological memory into our Vector Space mapped specifically to session
+  await insertData(query, { type: "memory", sessionId, timestamp: Date.now(), title: "User History" });
+}
+
+async function getRecentMemory(sessionId, limit = 3) {
+  try {
+    if (!process.env.QDRANT_URL) return [];
+    
+    // Scroll to natively fetch documents explicitly isolated to the user's specific conversational thread
+    const result = await qdrantClient.scroll(COLLECTION_NAME, {
+      filter: {
+        must: [
+          { key: "type", match: { value: "memory" } },
+          { key: "sessionId", match: { value: sessionId } }
+        ]
+      },
+      limit: 10,
+      with_payload: true
+    });
+    
+    let points = result.points;
+    // Sort strictly chronological, newest first to slice precisely the recent 3
+    points.sort((a, b) => b.payload.timestamp - a.payload.timestamp);
+    // Reverse again sequentially so the context window reads from oldest to newest predictably
+    return points.slice(0, limit).reverse();
+  } catch (error) {
+    console.error("Error retrieving memory from Qdrant:", error);
     return [];
   }
 }
@@ -110,5 +174,7 @@ module.exports = {
   initDB,
   insertData,
   searchData,
-  seedSampleData
+  seedSampleData,
+  insertMemory,
+  getRecentMemory
 };

@@ -12,7 +12,9 @@ router.post('/chat', async (req, res) => {
     try {
         const { text } = req.body;
         if (!text) return res.status(400).json({ error: "Missing text" });
-        const aiResponse = await processFarmerQuery(text);
+        
+        const sessionId = req.ip || "browser-demo-session";
+        const aiResponse = await processFarmerQuery(text, sessionId);
         res.json({ response: aiResponse });
     } catch (e) {
         console.error(e);

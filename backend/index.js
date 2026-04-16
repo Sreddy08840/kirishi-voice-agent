@@ -18,6 +18,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Krishi Voice AI Backend is running' });
 });
 
-app.listen(PORT, () => {
+const { initDB } = require('./qdrant/db');
+
+app.listen(PORT, async () => {
+    await initDB();
     console.log(`Server is running on port ${PORT}`);
 });

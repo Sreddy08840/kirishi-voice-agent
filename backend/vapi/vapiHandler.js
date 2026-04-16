@@ -33,8 +33,11 @@ async function handleVapiWebhook(req, res) {
     // 1. Log the farmer's raw conversation input
     console.log(`[Call Log] Farmer: ${userText}`);
 
+    // Map the unique session ID of the caller to gracefully isolate memory blocks
+    const sessionId = payload?.message?.call?.id || payload?.call?.id || "vapi-anonymous-session";
+
     // 2. Send query through our complete RAG orchestration service
-    const aiResponse = await processFarmerQuery(userText);
+    const aiResponse = await processFarmerQuery(userText, sessionId);
     
     // 3. Log the AI's response text
     console.log(`[Call Log] Krishi AI: ${aiResponse}`);

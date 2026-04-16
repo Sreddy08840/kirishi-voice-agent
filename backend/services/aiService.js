@@ -18,12 +18,11 @@ async function generateEmbedding(text) {
   }
 }
 
-async function generateFarmingAdvice(query, contextData = []) {
+async function generateFarmingAdvice(query, contextData = [], memoryData = []) {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" }); // Using new lightweight tier to prevent 503 errors with user's key
-    
     // Construct the context string from Qdrant search results
     const contextText = contextData.map(item => item.payload?.text || "").join('\n');
+    const memoryText = memoryData.map(item => item.payload?.text || "").join('\n');
     
     const prompt = `
 You are "Krishi Voice AI", an expert agricultural assistant.
@@ -34,18 +33,39 @@ Rules for your answer:
 - Provide short, clear, and farmer-friendly answers.
 - Use simple terms that are easy to speak out loud over a voice call.
 
-Context:
+Recent Chat History (Conversation Memory):
+${memoryText}
+
+Knowledge Base (Facts):
 ${contextText}
 
 Question:
 ${query}
 `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
+    // Escaping rate limits entirely by migrating conversational parsing dynamically to Groq's Lightning Fast Llama 3.3!
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (!data.choices) {
+        console.error("[Groq API Error]:", JSON.stringify(data, null, 2));
+        return "Groq Server Error. Please check terminal logs.";
+    }
+    
+    return data.choices[0].message.content;
   } catch (error) {
-    console.error("Error generating AI response:", error);
+    console.error("Error generating AI response via Groq:", error);
     return "Maaf kijiye, mujhe abhi samajh nahi aaya. Kripaya baad mein try karein.";
   }
 }

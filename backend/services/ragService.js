@@ -1,19 +1,22 @@
-const { searchData } = require('../qdrant/db');
+const { searchData, getRecentMemory, insertMemory } = require('../qdrant/db');
 const { generateFarmingAdvice } = require('./aiService');
 
 /**
  * Service that orchestrates the full RAG pipeline for the farmer's queries.
  */
-async function processFarmerQuery(query) {
+async function processFarmerQuery(query, sessionId = "default-session") {
   try {
-    // Step 1: Receives the user query as the input string 'query'
-
     // Step 2 & 3: generate embedding and search Qdrant for top 3 results
-    // (Note: searchData() internally calls generateEmbedding() and queries Qdrant with limit=3)
     const contextResults = await searchData(query, 3);
     
-    // Step 4: Sends query + context to Gemini
-    const answer = await generateFarmingAdvice(query, contextResults);
+    // Fetch last 3 conversations dynamically based on isolated session ID
+    const memoryResults = await getRecentMemory(sessionId, 3);
+    
+    // Step 4: Sends query + context + memory to Gemini natively
+    const answer = await generateFarmingAdvice(query, contextResults, memoryResults);
+
+    // Save strictly the User Query specifically backwards into memory for next turn
+    await insertMemory(sessionId, query);
 
     return answer;
   } catch (error) {
