@@ -4,7 +4,7 @@
 [![Built with Node.js](https://img.shields.io/badge/Built_with-Node.js-339933?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
 [![Powered by Vapi](https://img.shields.io/badge/Powered_by-Vapi.ai-blue?style=for-the-badge)](https://vapi.ai/)
 [![Database Qdrant](https://img.shields.io/badge/Database-Qdrant-red?style=for-the-badge&logo=qdrant)](https://qdrant.tech/)
-[![AI Models Gemini](https://img.shields.io/badge/AI-Google_Gemini-FFB700?style=for-the-badge&logo=google)](https://ai.google.dev/)
+[![AI Models Grok](https://img.shields.io/badge/AI-xAI_Grok-000000?style=for-the-badge&logo=x)](https://x.ai/)
 
 ---
 
