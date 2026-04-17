@@ -58,7 +58,7 @@ graph LR
 | **Backend** | Node.js, Express | Webhook streaming & centralized orchestration |
 | **Voice AI** | Vapi.ai | Ultra-low latency STT and TTS |
 | **Database** | Qdrant Cloud | High-speed Vector Semantic Search (RAG) |
-| **Generative AI** | Google Gemini | Embedding logic & Contextual responses |
+| **Generative AI** | Gork ai | Embedding logic & Contextual responses |
 
 ---
 
