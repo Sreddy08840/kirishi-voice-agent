@@ -42,7 +42,7 @@ graph LR
     B -->|Text Query| C(Node.js Webhook)
     C -->|Embeddings| D[(Qdrant Vector DB)]
     D -->|Agri-Context| C
-    C -->|Query + Context| E[Google Gemini AI]
+    C -->|Query + Context| E[Gork AI]
     E -->|Text Answer| C
     C -->|Text Payload| B
     B -->|Speech Voice| A((Farmer Ear))
