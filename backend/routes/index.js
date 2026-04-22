@@ -10,11 +10,11 @@ router.post('/webhook', handleVapiWebhook);
 // Simple chat endpoint for Browser Demo
 router.post('/chat', async (req, res) => {
     try {
-        const { text } = req.body;
+        const { text, language } = req.body;
         if (!text) return res.status(400).json({ error: "Missing text" });
         
         const sessionId = req.ip || "browser-demo-session";
-        const aiResponse = await processFarmerQuery(text, sessionId);
+        const aiResponse = await processFarmerQuery(text, sessionId, language);
         res.json({ response: aiResponse });
     } catch (e) {
         console.error(e);

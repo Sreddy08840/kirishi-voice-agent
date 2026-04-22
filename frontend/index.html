@@ -1,45 +1,738 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krishi Voice AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>Krishi Voice AI 🌱 - Empowering Farmers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Theme Tones */
+            --primary-gradient: linear-gradient(135deg, #2e7d32, #66bb6a);
+            --bg-color: #f5f5dc;
+            --text-main: #2c3e50;
+            --text-muted: #546e7a;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --accent: #fdd835;
+            --earth: #8d6e63;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Tones */
+            --primary-gradient: linear-gradient(135deg, #1b5e20, #4caf50);
+            --bg-color: #121212;
+            --text-main: #f5f5f5;
+            --text-muted: #b0bec5;
+            --card-bg: rgba(30, 30, 30, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #fbc02d;
+            --earth: #5d4037;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(76, 175, 80, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(253, 216, 53, 0.05), transparent 25%);
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.6); }
+            70% { box-shadow: 0 0 0 25px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 40px; }
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-main);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 5% 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.8;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .el-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .el-2 { top: 30%; right: 15%; animation-delay: 2s; }
+        .el-3 { bottom: 20%; left: 20%; animation-delay: 1s; }
+        .el-4 { bottom: 25%; right: 10%; animation-delay: 3s; font-size: 4rem;}
+
+        /* Voice AI Section */
+        .voice-section {
+            padding: 80px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .voice-card {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .mic-container {
+            margin: 0 auto 30px;
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mic-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s;
+        }
+
+        .mic-btn.listening {
+            animation: pulse-glow 1.5s infinite;
+            background: #e53935;
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .waveform {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        .waveform.active {
+            display: flex;
+        }
+
+        .wave-bar {
+            width: 6px;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) { animation-delay: 0.0s; }
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+        .chat-display {
+            text-align: left;
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bubble {
+            padding: 15px 20px;
+            border-radius: 15px;
+            max-width: 80%;
+            line-height: 1.5;
+            font-size: 1.1rem;
+        }
+
+        .bubble-user {
+            background: rgba(76, 175, 80, 0.1);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bubble-ai {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .controls-row select, .controls-row input {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            transform: translateZ(30px);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            transform: translateZ(20px);
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            transform: translateZ(10px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 5%;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* Add hamburger logic if needed */
+            .btn { width: 100%; justify-content: center; }
+            .bubble { max-width: 95%; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo-circle">
-                <!-- Simple leaf icon -->
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="leaf-icon">
-                    <path d="M12 22C12 22 5 16.5 5 10C5 6.13401 8.13401 3 12 3C15.866 3 19 6.13401 19 10C19 16.5 12 22 12 22Z" fill="#fff" fill-opacity="0.2" stroke="#fff" stroke-width="2"/>
-                </svg>
-            </div>
-            <h1>Krishi Voice AI</h1>
-            <p>Your Intelligent Agricultural Assistant</p>
-        </header>
 
-        <main>
-            <div class="conversation-box">
-                <div class="message-card user-card">
-                    <span class="label">You Said</span>
-                    <p id="transcript-display">Click 'Start Talking' and ask me anything about farming...</p>
-                </div>
-                <div class="message-card ai-card">
-                    <span class="label">Krishi AI</span>
-                    <p id="response-display">Waiting for your question...</p>
-                </div>
+    <!-- Floating Background Elements -->
+    <div class="floating-element el-1">🌾</div>
+    <div class="floating-element el-2">🚜</div>
+    <div class="floating-element el-3">🌦️</div>
+    <div class="floating-element el-4">🌱</div>
+
+    <!-- Navbar -->
+    <nav class="glass">
+        <a href="#" class="logo">Krishi AI 🌱</a>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#voice-assistant">Voice Assistant</a>
+            <a href="#features">Features</a>
+            <a href="#market">Market</a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-icon" id="themeToggle" title="Toggle Theme">☀️</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Empowering Farmers with AI Voice Technology</h1>
+            <p>Ask anything about crops, market prices, and government schemes. Speak naturally in your own language, and get instant, accurate advice.</p>
+            <div class="cta-group">
+                <a href="#voice-assistant" class="btn btn-primary">🎤 Start Voice Assistant</a>
+                <a href="#features" class="btn btn-secondary">📊 Check Market Prices</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Voice AI Section -->
+    <section id="voice-assistant" class="voice-section">
+        <h2 class="section-title">Your Personal Agriculture Assistant</h2>
+        
+        <div class="voice-card glass" id="tiltCard">
+            
+            <div class="controls-row">
+                <select id="languageSelect">
+                    <option value="hi-IN">Hindi (हिंदी)</option>
+                    <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
+                    <option value="en-US">English</option>
+                </select>
+                <input type="text" id="backendUrl" value="http://localhost:3000" placeholder="Backend URL">
             </div>
 
-            <div class="controls">
-                <button id="start-btn" class="mic-btn">
-                    <span class="btn-text">Start Talking</span>
-                    <div class="pulse-ring"></div>
-                </button>
+            <div class="mic-container">
+                <button id="startBtn" class="mic-btn" title="Tap to Speak">🎤</button>
             </div>
-        </main>
-    </div>
-    <script src="app.js"></script>
+            
+            <p id="statusNote" style="color: var(--text-muted); margin-bottom: 10px;">Tap the mic to start listening</p>
+            <button id="stopBtn" class="btn btn-secondary" style="padding: 5px 15px; font-size: 0.9rem; margin-bottom: 20px; display: none;">🛑 Stop</button>
+
+            <div class="waveform" id="waveform">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+            </div>
+
+            <div class="chat-display">
+                <div class="bubble bubble-user" id="userTranscript" style="display: none;">
+                    <!-- User text goes here -->
+                </div>
+                <div class="bubble bubble-ai" id="aiResponse" style="display: none;">
+                    <!-- AI response goes here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">Powerful Capabilities</h2>
+        <div class="grid">
+            <div class="feature-card glass tilt-feature">
+                <div class="feature-icon">🗣️</div>
+                <h3>Voice Queries</h3>
+                <p>Support for Hindi, Kannada, and English. No typing required.</p>
+            </div>
+            <div class="feature-card glass tilt-feature">
+                <div class="feature-icon">📊</div>
+                <h3>Live Mandi Prices</h3>
+                <p>Get real-time market rates for your crops across local markets.</p>
+            </div>
+            <div class="feature-card glass tilt-feature">
+                <div class="feature-icon">🌾</div>
+                <h3>Government Schemes</h3>
+                <p>Stay updated on PM-KISAN, subsidies, and insurance policies.</p>
+            </div>
+            <div class="feature-card glass tilt-feature">
+                <div class="feature-icon">🍅</div>
+                <h3>Disease Detection</h3>
+                <p>Identify crop diseases quickly and get treatment recommendations.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass">
+        <p>&copy; 2026 Krishi Voice AI. Built for the farmers of India.</p>
+    </footer>
+
+    <!-- JavaScript integrated from actual logic + UI interactions -->
+    <script>
+        // --- UI Interactions ---
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const root = document.documentElement;
+            const isDark = root.getAttribute('data-theme') === 'dark';
+            root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            themeToggle.textContent = isDark ? '🌙' : '☀️';
+        });
+
+        // 3D Tilt Effect on Voice Card and Features
+        function applyTilt(elements) {
+            elements.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -5;
+                    const rotateY = ((x - centerX) / centerX) * 5;
+                    el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                el.addEventListener('mouseleave', () => {
+                    el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+                });
+            });
+        }
+        applyTilt(document.querySelectorAll('.tilt-feature'));
+        // We omit tilt on voice card to prevent clicking issues during interaction
+
+        // --- Core Application Logic (from original app.js) ---
+        
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const userTranscript = document.getElementById('userTranscript');
+        const aiResponse = document.getElementById('aiResponse');
+        const languageSelect = document.getElementById('languageSelect');
+        const backendUrlEl = document.getElementById('backendUrl');
+        const statusNote = document.getElementById('statusNote');
+        const waveform = document.getElementById('waveform');
+
+        let recognition = null;
+        let isListening = false;
+        let currentAbortController = null;
+        let currentAudio = null;
+
+        // Restore URL
+        if(localStorage.getItem('backendUrl')) {
+            backendUrlEl.value = localStorage.getItem('backendUrl');
+        }
+        backendUrlEl.addEventListener('change', () => localStorage.setItem('backendUrl', backendUrlEl.value));
+
+        // Speech Synthesis with Google Fallback
+        function speakText(text) {
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+            const targetLang = languageSelect.value; 
+            const langCode = targetLang.split('-')[0];
+            
+            let voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+            let nativeVoice = voices.find(v => v.lang === targetLang || v.lang.startsWith(langCode));
+
+            if (langCode === 'kn' || !nativeVoice) {
+                const safeText = text.substring(0, 195);
+                const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${langCode}&q=${encodeURIComponent(safeText)}`;
+                currentAudio = new Audio(url);
+                currentAudio.play().catch(e => {
+                    console.error("Audio fallback failed:", e);
+                    fallbackToNativeSpeech(text, targetLang, nativeVoice);
+                });
+            } else {
+                fallbackToNativeSpeech(text, targetLang, nativeVoice);
+            }
+        }
+
+        function fallbackToNativeSpeech(text, lang, voice) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                if (voice) utterance.voice = voice;
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Initialize Speech Recognition
+        function createRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return null;
+            
+            const r = new SpeechRecognition();
+            r.lang = languageSelect.value;
+            r.continuous = false;
+            r.interimResults = true;
+
+            r.onstart = () => {
+                isListening = true;
+                startBtn.classList.add('listening');
+                stopBtn.style.display = 'inline-block';
+                statusNote.textContent = 'Listening...';
+                waveform.classList.add('active');
+                
+                userTranscript.style.display = 'none';
+                aiResponse.style.display = 'none';
+            };
+
+            r.onerror = (e) => {
+                statusNote.textContent = `Error: ${e.error}`;
+                resetUI();
+            };
+
+            r.onend = () => {
+                isListening = false;
+                resetUI();
+            };
+
+            r.onresult = async (event) => {
+                let finalText = '';
+                let interimText = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) finalText += event.results[i][0].transcript;
+                    else interimText += event.results[i][0].transcript;
+                }
+
+                const combined = (finalText || interimText || '').trim();
+                if (combined) {
+                    userTranscript.style.display = 'block';
+                    userTranscript.textContent = combined;
+                }
+
+                if (finalText && finalText.trim()) {
+                    resetUI();
+                    await fetchAIResponse(finalText.trim());
+                }
+            };
+            return r;
+        }
+
+        function resetUI() {
+            startBtn.classList.remove('listening');
+            waveform.classList.remove('active');
+            stopBtn.style.display = 'none';
+            statusNote.textContent = 'Tap the mic to start listening';
+        }
+
+        async function fetchAIResponse(query) {
+            const baseUrl = backendUrlEl.value.trim().replace(/\/$/, '');
+            if (!baseUrl) {
+                statusNote.textContent = 'Error: Please enter Backend URL';
+                return;
+            }
+
+            const url = `${baseUrl}/vapi/chat`;
+            statusNote.textContent = 'Thinking...';
+            
+            aiResponse.style.display = 'block';
+            aiResponse.innerHTML = '<span style="opacity:0.5">Processing...</span>';
+
+            currentAbortController = new AbortController();
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: query, language: languageSelect.value }),
+                    signal: currentAbortController.signal
+                });
+
+                if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+                
+                const data = await response.json();
+                const answerText = data.response || data.answer || "Error: No answer received.";
+                
+                aiResponse.textContent = answerText;
+                statusNote.textContent = 'Done!';
+                speakText(answerText);
+                
+            } catch (err) {
+                if (err.name === 'AbortError') return;
+                aiResponse.textContent = `Error: ${err.message}`;
+                statusNote.textContent = 'Request failed.';
+            }
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', () => {
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            if (currentAbortController) currentAbortController.abort();
+
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRec) {
+                alert('Voice recognition not supported in this browser. Please use Chrome/Edge.');
+                return;
+            }
+
+            if (!recognition) recognition = createRecognition();
+            else recognition.lang = languageSelect.value;
+
+            try { recognition.start(); } catch(e) {}
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            if (recognition && isListening) recognition.stop();
+        });
+
+        languageSelect.addEventListener('change', () => {
+            if (recognition) recognition.lang = languageSelect.value;
+        });
+
+    </script>
 </body>
 </html>

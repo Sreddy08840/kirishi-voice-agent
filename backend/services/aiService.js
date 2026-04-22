@@ -18,20 +18,28 @@ async function generateEmbedding(text) {
   }
 }
 
-async function generateFarmingAdvice(query, contextData = [], memoryData = []) {
+async function generateFarmingAdvice(query, contextData = [], memoryData = [], language = "hi-IN") {
   try {
     // Construct the context string from Qdrant search results
     const contextText = contextData.map(item => item.payload?.text || "").join('\n');
     const memoryText = memoryData.map(item => item.payload?.text || "").join('\n');
     
+    const langNames = {
+        'hi-IN': 'Hindi',
+        'kn-IN': 'Kannada',
+        'en-US': 'English'
+    };
+    const targetLang = langNames[language] || 'Hindi';
+    
     const prompt = `
-You are "Krishi Voice AI", an expert agricultural assistant.
+You are "Krishi AI", a helpful agriculture assistant for Indian farmers.
 Based on the provided context, answer the farmer's question.
 
 Rules for your answer:
-- Determine if the user is asking in English, Kannada, or Hindi, and respond in that exact language.
-- Provide short, clear, and farmer-friendly answers.
-- Use simple terms that are easy to speak out loud over a voice call.
+- Answer ONLY in ${targetLang}. Do not use any other language.
+- Keep responses short (max 2 sentences).
+- Give practical advice.
+- If unsure or if the question is outside agricultural topics, say "Kripya krishi adhikari se salah lein"
 
 Recent Chat History (Conversation Memory):
 ${memoryText}
