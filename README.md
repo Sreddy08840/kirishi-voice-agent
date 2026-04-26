@@ -121,7 +121,18 @@ Agricultural tech is rarely built for the physical reality of the fields. **Farm
 ---
 
 ## 🤝 Contributors
-- **[Sreddy08840](https://github.com/Sreddy08840)**
+-<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Sreddy08840">
+        <img src="https://github.com/Sreddy08840.png" width="100px;" alt="Sreddy08840"/><br/>
+        <sub><b>Sreddy08840</b></sub>
+      </a><br/>
+      <sub>🌱 Creator & Lead Developer</sub><br/>
+      <sub>· Voice AI · </sub>
+    </td>
+  </tr>
+</table>
 
 ## 📜 License
 Distributed under the MIT License. See `LICENSE` for more information.
